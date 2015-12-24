@@ -1,60 +1,8 @@
 import paho.mqtt.client as mqtt
 from time import sleep
 
-from datetime import datetime
-import random
-import urls
-import helpers
-
-def createDevice(deviceID,platformIndex):
-  device = {
-    "@context": urls.contextUrl+"deviceContext.jsonld",
-    "@type":"Device",
-    "@id":deviceID,
-    "dev:hasPlatform":helpers.platformIds[platformIndex]
-  }
-
-  return device
-
-def createPlatform(platformIndex,sensorIndex,actuatorIndex):
-    platformId = helpers.platformIds[platformIndex]
-    platform = {
-        "@context":urls.contextUrl+"platformContext.jsonld",
-        "@type":"Platform",
-        "@id":platformId,
-        "brand":"Plataforma " + str(platformId),
-        "dev:hasSensor":helpers.sensorIds[sensorIndex],
-        "dev:hasActuator":helpers.actuatorIds[actuatorIndex]
-    }
-    #requests.post(urls.globalManagerUrl+'platforms',None,platform)
-
-
-def createMeasurement(deviceId,coefficient):
-    value = 10*coefficient
-    id = helpers.localUrl + "measurements/measurement"+str(random.randint(0,1000))
-    timestamp = str (datetime.now())
-    measurement = {
-        "@context":urls.contextUrl+"measurementContext.jsonld",
-        "@type":"Measurement",
-        "@id":id,
-        "dev:wasMeasuredBy":deviceId,
-        "value":value,
-        "timestamp":timestamp
-    }
-
-    return measurement
-
-def simulateDevices():
-    #deviceUrl = urls.localManagerUrl + 'devices'
-    #measurementUrl = urls.localManagerUrl + 'measurements'
-
-    for i in range(20):
-        index = i%2
-        createPlatform(index,index,index)
-        device = createDevice(helpers.deviceIdList[i],index)
-        print (device)
-        measurement = createMeasurement(helpers.deviceIdList[i],i)
-
+import semantics.simulator.deviceSimulator as dev
+import semantics.simulator.helpers as helpers
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -72,9 +20,12 @@ client.connect("localhost", 1885, 60)
 
 client.loop_start()
 
+index = 0
 while True:
     sleep(1)
-    client.publish("gateways/test","i'm the gatewayExample!")
-    simulateDevices()
+    dev.createPlatform(index,index,index)
+    device = dev.createDevice(helpers.deviceIdList[index],index)
+    index+=1
+    client.publish("gateways/test",str(device))
 
 client.loop_stop()
