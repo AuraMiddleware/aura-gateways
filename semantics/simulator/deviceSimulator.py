@@ -1,8 +1,8 @@
 from datetime import datetime
 import requests
 import random
-import urls
-import helpers
+import semantics.simulator.urls as urls
+import semantics.simulator.helpers as helpers
 
 def createDevice(deviceID,platformIndex):
   device = {

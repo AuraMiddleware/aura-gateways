@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 from time import sleep
+import json
 
 import semantics.simulator.deviceSimulator as dev
 import semantics.simulator.helpers as helpers
@@ -23,8 +24,8 @@ client.loop_start()
 index = 0
 while True:
     sleep(1)
-    dev.createPlatform(index,index,index)
-    device = dev.createDevice(helpers.deviceIdList[index],index)
+    #dev.createPlatform(index,index,index)
+    device = dev.createDevice(helpers.deviceIdList[index%20],index%2)
     index+=1
     client.publish("gateways/test",str(device))
 
