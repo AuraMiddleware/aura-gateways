@@ -5,7 +5,7 @@ setup(name='AuraGateways',
       author='Vinícius Matos da Silveira Fraga',
       author_email='vinicius.vmsf@gmail.com',
       packages=['gateways',
-                'semantics.simulator'],
+                'semantics'],
       install_requires=[
           'paho-mqtt',
       ],
