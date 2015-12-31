@@ -11,7 +11,6 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
-    client.publish("gateways/test","test received:" + str(msg))
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -27,6 +26,6 @@ while True:
     #dev.createPlatform(index,index,index)
     device = dev.createDevice(helpers.deviceIdList[index%20],index%2)
     index+=1
-    client.publish("gateways/test",str(device))
+    client.publish("gateways/test",json.dumps(device))
 
 client.loop_stop()

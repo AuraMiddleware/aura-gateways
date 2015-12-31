@@ -28,8 +28,7 @@ def createPlatform(platformIndex,sensorIndex,actuatorIndex):
 
 def createMeasurement(deviceId,coefficient):
     value = 10 * coefficient
-    id = helpers.localUrl + "measurements/measurement" +
-        str(random.randint(0,1000))
+    id = helpers.localUrl + "measurements/measurement" + str(random.randint(0,1000))
     timestamp = str (datetime.now())
     measurement = {
         "@context": urls.contextUrl + "measurementContext.jsonld",
