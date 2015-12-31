@@ -11,4 +11,3 @@ scenarioValues = [5.44,55.7,40]
 platformIds = [globalUrl+"platforms/continuousPlatform",
                globalUrl+"platforms/discretePlatform"]
 deviceIdList = [localUrl+"devices/device" + str(x) for x in range(20)]
-
