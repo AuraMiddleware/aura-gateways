@@ -1,5 +1,5 @@
 from datetime import datetime
-import requests
+
 import random
 import semantics.simulator.urls as urls
 import semantics.simulator.helpers as helpers
@@ -26,7 +26,7 @@ def createPlatform(platformId,sensorId,actuatorId):
     return platform
 
 def createMeasurement(deviceId,coefficient):
-    value = 10 * coefficient
+    value = coefficient
     id = helpers.localUrl + "measurements/measurement" + str(random.randint(0,1000))
     timestamp = str (datetime.now())
     measurement = {
@@ -39,15 +39,3 @@ def createMeasurement(deviceId,coefficient):
     }
 
     return measurement
-
-def simulateDevices():
-    deviceUrl = urls.localManagerUrl + 'devices'
-    measurementUrl = urls.localManagerUrl + 'measurements'
-
-    for i in range(20):
-        index = i % 2
-        createPlatform(index, index, index)
-        device = createDevice(helpers.deviceIdList[i], index)
-        requests.post(deviceUrl, None, device)
-        measurement = createMeasurement(helpers.deviceIdList[i], i)
-        requests.post(measurementUrl, None, measurement)

@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 from time import sleep
 import json
-
+import random
 import semantics.simulator.deviceSimulator as dev
 import semantics.simulator.sense as sense
 import semantics.simulator.actuators as act
@@ -88,15 +88,17 @@ client.connect("localhost", 1885, 60)
 client.loop_start()
 
 index = 0
-sleep(1)
-client.publish("gateways/test",
-                json.dumps(devices[helpers.deviceIds[(index%10)]]))
-
 while True:
-    sleep(1)
-    #client.publish("gateways/test",
-    #              json.dumps(devices[helpers.deviceIds[(index%10)]]))
-    index+=1
+    for id in devices:
+        sleep(1)
+        if index%2 == 0:
+            value = random.random() * 100
+            index = 1
+        else:
+            value = True
+            index = 0
+        measurement = dev.createMeasurement(devices[id]["@id"], value)
+        client.publish("gateways/test", json.dumps(measurement))
 
 client.loop_stop()
 
