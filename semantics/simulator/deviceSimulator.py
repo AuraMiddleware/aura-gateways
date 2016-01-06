@@ -14,17 +14,16 @@ def createDevice(deviceID,platformIndex):
 
   return device
 
-def createPlatform(platformIndex,sensorIndex,actuatorIndex):
-    platformId = helpers.platformIds[platformIndex]
+def createPlatform(platformId,sensorId,actuatorId):
     platform = {
         "@context": urls.contextUrl + "platformContext.jsonld",
         "@type":"Platform",
         "@id":platformId,
         "brand":"Plataforma " + str(platformId),
-        "dev:hasSensor":helpers.sensorIds[sensorIndex],
-        "dev:hasActuator":helpers.actuatorIds[actuatorIndex]
+        "dev:hasSensor":sensorId,
+        "dev:hasActuator":actuatorId
     }
-    requests.post(urls.globalManagerUrl+'platforms',None,platform)
+    return platform
 
 def createMeasurement(deviceId,coefficient):
     value = 10 * coefficient

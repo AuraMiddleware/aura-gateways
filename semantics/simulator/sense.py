@@ -1,14 +1,14 @@
 import requests
 import random
-import urls
-import helpers
+import semantics.simulator.urls as urls
+import semantics.simulator.helpers as helpers
 
-def createContinuousSensor(sensorId,index):
+def createContinuousSensor(sensorId, unitId):
     sensor = {
         "@context":urls.contextUrl+"continuousSensorContext.jsonld",
         "@type":"ContinuousSensor",
         "@id":sensorId,
-        "sense:canMeasure":createUnit(index),
+        "sense:canMeasure":unitId,
         "precision":random.uniform(0.0,1.0),
         "minValue":0.0,
         "maxValue":100.0
@@ -16,36 +16,34 @@ def createContinuousSensor(sensorId,index):
 
     return sensor
 
-def createDiscreteSensor(sensorId,index):
+def createDiscreteSensor(sensorId, variableId):
     sensor = {
         "@context":urls.contextUrl+"discreteSensorContext.jsonld",
         "@type":"DiscreteSensor",
         "@id":sensorId,
-        "sense:canMeasure":helpers.variableIds[index]
+        "sense:canMeasure":variableId
     }
 
     return sensor
 
-def createUnit(index):
-    unitId = helpers.globalUrl + "units/unit"+str(random.randint(0,1000))
+def createUnit(unitId, variableId):
     unit = {
         "@context":urls.contextUrl+"unitContext.jsonld",
         "@id":unitId,
         "@type":"Unit",
-        "sense:unitOf":helpers.variableIds[index]
+        "sense:unitOf":variableId
     }
-    requests.post(urls.globalManagerUrl+'units',None,unit)
 
-    return unitId
+    return unit
 
-def createVariable(index):
-    variableId = helpers.variableIds[index]
+def createVariable(variableId):
     variable = {
         "@context":urls.contextUrl+"variableContext.jsonld",
         "@id":variableId,
         "@type":"Variable"
     }
-    requests.post(urls.globalManagerUrl+'variables',None,variable)
+
+    return variable
 
 
 def createSenseInfo():

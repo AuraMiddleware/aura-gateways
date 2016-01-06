@@ -5,6 +5,7 @@ setup(name='AuraGateways',
       author='Vinícius Matos da Silveira Fraga',
       author_email='vinicius.vmsf@gmail.com',
       packages=['gateways',
+                'gateways.gatewayExample',
                 'semantics',
                 'semantics.simulator'
                 ],
@@ -12,6 +13,7 @@ setup(name='AuraGateways',
           'paho-mqtt',
       ],
       entry_points = {
-        'console_scripts': ['auraGateway=gateways.gateway_example:main'],
+        'console_scripts': [
+            'auraGateway=gateways.gatewayExample.gateway_example:main'],
       }
       )

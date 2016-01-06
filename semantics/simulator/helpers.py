@@ -3,11 +3,20 @@ localUrl = "http://localhost:5001/"
 
 variableIds = [globalUrl+"variables/continuousVariable",
                globalUrl+"variables/discreteVariable"]
-sensorIds = [globalUrl+"sensors/continuousSensor",
-             globalUrl+"sensors/discreteSensor"]
-actuatorIds = [globalUrl+"actuators/continuousActuator",
-               globalUrl+"actuators/discreteActuator"]
+
+unitIds = [globalUrl+"units/unit#1"]
+
+continuousSensorIds = [globalUrl+"sensors/continuousSensor#1"]
+
+discreteSensorIds = [globalUrl+"sensors/discreteSensor#1"]
+
+continuousActuatorIds = [globalUrl+"actuators/continuousActuator#1"]
+
+discreteActuatorIds = [globalUrl+"actuators/discreteActuator#1"]
+
 scenarioValues = [5.44,55.7,40]
-platformIds = [globalUrl+"platforms/continuousPlatform",
-               globalUrl+"platforms/discretePlatform"]
-deviceIdList = [localUrl+"devices/device" + str(x) for x in range(20)]
+
+platformIds = [globalUrl+"platforms/continuousPlatform#1",
+               globalUrl+"platforms/discretePlatform#1"]
+
+deviceIds = [localUrl+"devices/device" + str(x) for x in range(10)]

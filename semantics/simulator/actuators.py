@@ -1,29 +1,25 @@
 import requests
 import random
-import urls
-import helpers
+import semantics.simulator.urls as urls
+import semantics.simulator.helpers as helpers
 
-def createContinuousActuator(actuatorIndex,variableIndex):
-    actuatorId = helpers.actuatorIds[actuatorIndex]
-    variable = helpers.variableIds[variableIndex]
+def createContinuousActuator(actuatorId,variableId):
     actuator = {
         "@context":urls.contextUrl + "continuousActuatorContext.jsonld",
         "@type":"ContinuousActuator",
         "@id":actuatorId,
-        "actuator:increases":variable,
-        "actuator:decreases":variable
+        "actuator:increases":variableId,
+        "actuator:decreases":variableId
     }
 
     return actuator
 
-def createDiscreteActuator(actuatorIndex,variableIndex):
-    actuatorId = helpers.actuatorIds[actuatorIndex]
-    variable = helpers.variableIds[variableIndex]
+def createDiscreteActuator(actuatorId,variableId):
     actuator = {
         "@context":urls.contextUrl + "discreteActuatorContext.jsonld",
         "@type":"DiscreteActuator",
         "@id":actuatorId,
-        "actuator:changeState":variable
+        "actuator:changeState":variableId
     }
 
     return actuator
