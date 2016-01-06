@@ -10,43 +10,44 @@ import semantics.simulator.helpers as helpers
 variables = {}
 for i in range(len(helpers.variableIds)):
     variables[helpers.variableIds[i]] = sense.createVariable(
-        helpers.deviceIds[i])
+        helpers.variableIds[i])
 
 units = {}
 for i in range(len(helpers.unitIds)):
     units[helpers.unitIds[i]] = sense.createUnit(helpers.unitIds[i],
                                                  helpers.variableIds[i])
 
-continuous_sensors = {}
-for i in range(len(helpers.continuousSensorIds)):
-    continuous_sensors[helpers.continuousSensorIds[i]] = \
-        sense.createContinuousSensor(helpers.continuousSensorIds[i],
-                                     helpers.variableIds[0])
-discrete_sensors = {}
-for i in range(len(helpers.continuousSensorIds)):
-    discrete_sensors[helpers.discreteSensorIds[i]] = \
-        sense.createDiscreteSensor(helpers.discreteSensorIds[i],
-                                   helpers.variableIds[1])
+sensors = {}
+for i in range(len(helpers.sensorsIds)):
+    if i%2 == 0:
+        sensors[helpers.sensorsIds[i]] = sense.createContinuousSensor(
+            helpers.sensorsIds[i],
+            helpers.unitIds[0]
+        )
+    else:
+        sensors[helpers.sensorsIds[i]] = sense.createDiscreteSensor(
+            helpers.sensorsIds[i],
+            helpers.variableIds[i]
+        )
 
-continuous_actuators = {}
-for i in range(len(helpers.continuousActuatorIds)):
-        continuous_actuators[helpers.continuousActuatorIds[i]] = \
-            act.createContinuousActuator(helpers.continuousActuatorIds[i],
-                                         helpers.variableIds[0])
-
-discrete_actuators = {}
-for i in range(len(helpers.discreteActuatorIds)):
-        discrete_actuators[helpers.discreteActuatorIds[i]] = \
-            act.createDiscreteActuator(helpers.discreteActuatorIds[i],
-                                         helpers.variableIds[1])
+actuators = {}
+for i in range(len(helpers.actuatorsIds)):
+    if i%2 == 0:
+        actuators[helpers.actuatorsIds[i]] = act.createContinuousActuator(
+            helpers.actuatorsIds[i],
+            helpers.variableIds[i]
+        )
+    else:
+        actuators[helpers.actuatorsIds[i]] = act.createDiscreteActuator(
+            helpers.actuatorsIds[i],
+            helpers.variableIds[i]
+        )
 
 platforms = {}
-platforms[helpers.platformIds[0]] = dev.createPlatform(
-    helpers.platformIds[0], helpers.continuousSensorIds[0],
-    helpers.continuousActuatorIds[0])
-platforms[helpers.platformIds[1]] = dev.createPlatform(
-    helpers.platformIds[1], helpers.discreteSensorIds[0],
-    helpers.discreteActuatorIds[0])
+for i in range(len(helpers.platformIds)):
+    platforms[helpers.platformIds[i]] = dev.createPlatform(
+        helpers.platformIds[i], helpers.sensorsIds[i], helpers.actuatorsIds[i]
+    )
 
 devices = {}
 for i in range(len(helpers.deviceIds)):
@@ -54,11 +55,9 @@ for i in range(len(helpers.deviceIds)):
 
 measurements = {}
 
-collections = [measurements, devices, platforms, continuous_actuators,
-               discrete_actuators, continuous_sensors, discrete_sensors,
-               units, variables]
-types = ['Measurement', 'Device', 'Platform', 'ContinuousActuator',
-         'DiscreteActuator', 'ContinuousSensor', 'DiscreteSensor', 'Unit',
+collections = [measurements, devices, platforms, sensors, actuators, units,
+               variables]
+types = ['Measurement', 'Device', 'Platform', 'Sensor', 'Actuator', 'Unit',
          'Variable']
 
 def on_connect(client, userdata, flags, rc):
@@ -69,11 +68,16 @@ def on_message(client, userdata, msg):
     print(msg.payload.decode())
     obj = json.loads(msg.payload.decode())
     if obj['type'] in types:
-        response = collections[types.index(obj['type'])][obj['id']]
-        print("\n\nresponse:")
-        print(response)
-        client.publish("gateways/test",
-                       json.dumps(response))
+        index = len(types) - 1
+        while index >= 0:
+            print("index = " + str(index))
+            for key in collections[index]:
+                response = collections[index][key]
+                print("\n\nresponse:")
+                print(response)
+                client.publish("gateways/test",
+                               json.dumps(response))
+            index -= 1
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -84,12 +88,15 @@ client.connect("localhost", 1885, 60)
 client.loop_start()
 
 index = 0
+sleep(1)
+client.publish("gateways/test",
+                json.dumps(devices[helpers.deviceIds[(index%10)]]))
+
 while True:
     sleep(1)
-    #dev.createPlatform(index,index,index)
-    client.publish("gateways/test",
-                  json.dumps(devices[helpers.deviceIds[(index%10)]]))
+    #client.publish("gateways/test",
+    #              json.dumps(devices[helpers.deviceIds[(index%10)]]))
     index+=1
 
-
 client.loop_stop()
+

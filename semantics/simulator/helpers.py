@@ -7,12 +7,12 @@ variableIds = [globalUrl+"variables/continuousVariable",
 unitIds = [globalUrl+"units/unit#1"]
 
 continuousSensorIds = [globalUrl+"sensors/continuousSensor#1"]
-
 discreteSensorIds = [globalUrl+"sensors/discreteSensor#1"]
+sensorsIds = continuousSensorIds + discreteSensorIds
 
 continuousActuatorIds = [globalUrl+"actuators/continuousActuator#1"]
-
 discreteActuatorIds = [globalUrl+"actuators/discreteActuator#1"]
+actuatorsIds = continuousActuatorIds + discreteActuatorIds
 
 scenarioValues = [5.44,55.7,40]
 
