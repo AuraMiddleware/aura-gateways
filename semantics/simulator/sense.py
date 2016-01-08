@@ -1,14 +1,13 @@
-import requests
 import random
 import semantics.simulator.urls as urls
-import semantics.simulator.helpers as helpers
 
-def createContinuousSensor(sensorId, unitId):
+def createContinuousSensor(id, url, unitId):
     sensor = {
+        "id": id,
         "@context":urls.contextUrl+"continuousSensorContext.jsonld",
         "@type":"ContinuousSensor",
-        "@id":sensorId,
-        "sense:canMeasure":unitId,
+        "@id":url + "continuous_sensors/" + id,
+        "sense:canMeasure":url + "units/" + unitId,
         "precision":random.uniform(0.0,1.0),
         "minValue":0.0,
         "maxValue":100.0
@@ -16,43 +15,34 @@ def createContinuousSensor(sensorId, unitId):
 
     return sensor
 
-def createDiscreteSensor(sensorId, variableId):
+def createDiscreteSensor(id, url, variableId):
     sensor = {
+        "id":id,
         "@context":urls.contextUrl+"discreteSensorContext.jsonld",
         "@type":"DiscreteSensor",
-        "@id":sensorId,
-        "sense:canMeasure":variableId
+        "@id":url + "discrete_sensors/" + id,
+        "sense:canMeasure":url + "variables/" + variableId
     }
 
     return sensor
 
-def createUnit(unitId, variableId):
+def createUnit(id, url, variableId):
     unit = {
+        "id":id,
         "@context":urls.contextUrl+"unitContext.jsonld",
-        "@id":unitId,
+        "@id":url + "units/" + id,
         "@type":"Unit",
-        "sense:unitOf":variableId
+        "sense:unitOf":url + "variables/" + variableId
     }
 
     return unit
 
-def createVariable(variableId):
+def createVariable(id, url):
     variable = {
+        "id": id,
         "@context":urls.contextUrl+"variableContext.jsonld",
-        "@id":variableId,
+        "@id": url + "variables/" + id,
         "@type":"Variable"
     }
 
     return variable
-
-
-def createSenseInfo():
-    for i in range(1):
-        createVariable(0)
-        createVariable(1)
-        continuousSensorId = helpers.sensorIds[0]
-        discreteSensorId = helpers.sensorIds[1]
-        continuousSensor = createContinuousSensor(continuousSensorId,0)
-        discreteSensor = createDiscreteSensor(discreteSensorId,1)
-        requests.post(urls.globalManagerUrl+'sensors',None,continuousSensor)
-        requests.post(urls.globalManagerUrl+'sensors',None,discreteSensor)

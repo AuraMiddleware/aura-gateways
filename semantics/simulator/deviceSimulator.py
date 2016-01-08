@@ -2,38 +2,40 @@ from datetime import datetime
 
 import random
 import semantics.simulator.urls as urls
-import semantics.simulator.helpers as helpers
 
-def createDevice(deviceID,platformIndex):
+def createDevice(id, url, platformId):
   device = {
+    "id":id,
     "@context": urls.contextUrl + "deviceContext.jsonld",
     "@type":"Device",
-    "@id":deviceID,
-    "dev:hasPlatform":helpers.platformIds[platformIndex]
+    "@id":url + "devices/" + id,
+    "dev:hasPlatform":url + "platforms/" + platformId
   }
 
   return device
 
-def createPlatform(platformId,sensorId,actuatorId):
+def createPlatform(id, url, specific_sensor, specific_actuator):
     platform = {
+        "id":id,
         "@context": urls.contextUrl + "platformContext.jsonld",
         "@type":"Platform",
-        "@id":platformId,
-        "brand":"Plataforma " + str(platformId),
-        "dev:hasSensor":sensorId,
-        "dev:hasActuator":actuatorId
+        "@id":url + "platforms/" + id,
+        "brand":"Plataforma " + id,
+        "dev:hasSensor":url + specific_sensor,
+        "dev:hasActuator":url  + specific_actuator
     }
     return platform
 
-def createMeasurement(deviceId,coefficient):
-    value = coefficient
-    id = helpers.localUrl + "measurements/measurement" + str(random.randint(0,1000))
+def createMeasurement(url, deviceId, value):
     timestamp = str (datetime.now())
+    id = str(random.randint(0,10000)) + str(datetime.now().microsecond) +\
+        str(random.randint(0,10000))
     measurement = {
+        "id": id,
         "@context": urls.contextUrl + "measurementContext.jsonld",
         "@type": "Measurement",
-        "@id": id,
-        "dev:wasMeasuredBy": deviceId,
+        "@id": url + "measurements/" + id,
+        "dev:wasMeasuredBy": url + "devices/" + deviceId,
         "value": value,
         "timestamp": timestamp
     }
