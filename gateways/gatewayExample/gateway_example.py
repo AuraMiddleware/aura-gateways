@@ -41,12 +41,16 @@ while True:
         sleep(1)
         if index%2 == 0:
             value = random.random() * 100
+            variableId = helpers.variableIds[0]
             index = 1
         else:
             value = True
             index = 0
+            variableId = helpers.variableIds[1]
         measurement = dev.createMeasurement(helpers.globalUrl,
-                                            helpers.devices[id]["id"], value)
+                                            helpers.devices[id]["id"],
+                                            helpers.variables[variableId]["id"],
+                                            value)
         print(measurement)
         client.publish("gateways/test", json.dumps(measurement))
 

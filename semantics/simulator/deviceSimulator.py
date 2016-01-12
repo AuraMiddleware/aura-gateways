@@ -26,7 +26,7 @@ def createPlatform(id, url, specific_sensor, specific_actuator):
     }
     return platform
 
-def createMeasurement(url, deviceId, value):
+def createMeasurement(url, deviceId, variableId, value):
     timestamp = str (datetime.now())
     id = str(random.randint(0,10000)) + str(datetime.now().microsecond) +\
         str(random.randint(0,10000))
@@ -36,6 +36,7 @@ def createMeasurement(url, deviceId, value):
         "@type": "Measurement",
         "@id": url + "measurements/" + id,
         "dev:wasMeasuredBy": url + "devices/" + deviceId,
+        "dev:valueOf": url + "devices/" + variableId,
         "value": value,
         "timestamp": timestamp
     }
