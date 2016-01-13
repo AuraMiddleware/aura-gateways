@@ -1,5 +1,5 @@
 globalManagerUrl = "http://localhost:5000/"
 localManagerUrl = "http://localhost:5001/"
-hostUrl = "https://github.com/viniciusmsfraga/auramiddleware/blob/master/semantics/"
+hostUrl = "https://raw.githubusercontent.com/viniciusmsfraga/auramiddleware/master/semantics/"
 ontologyUrl = hostUrl + "ontologies/"
 contextUrl = hostUrl + "contexts/"
