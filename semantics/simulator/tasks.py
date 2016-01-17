@@ -1,26 +1,28 @@
 from semantics.simulator import urls
+import requests
+import json
 
-def createCommand(id, url, value,variableId):
+def createCommand(id, url, value, variableId):
     command = {
-        "id":id,
-        "@context": urls.contextUrl + "discreteScenarioContext.jsonld",
-        "@type":"DiscreteScenario",
-        "@id":url + "commands/" + id,
-        "value":value,
-        "scenario:enforces":url + "variables/" + variableId
+        "id": id,
+        "@context": urls.contextUrl + "commandContext.jsonld",
+        "@type": "Command",
+        "@id": url + "commands/" + id,
+        "value": value,
+        "task:enforces": url + "variables/" + variableId
     }
 
     return command
 
 def createCondition(id, url, range1, range2, variableId):
     condition = {
-        "id":id,
-        "@context":urls.contextUrl+"continuousScenarioContext.jsonld",
-        "@type":"ContinuousScenario",
-        "@id":url + "conditions/" + id,
-        "minValue":range1,
-        "maxValue":range2,
-        "scenario:enforces":url + "variables/" + variableId
+        "id": id,
+        "@context": urls.contextUrl + "conditionContext.jsonld",
+        "@type": "Condition",
+        "@id": url + "conditions/" + id,
+        "minValue": range1,
+        "maxValue": range2,
+        "task:enforces": url + "variables/" + variableId
     }
 
     return condition

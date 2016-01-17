@@ -36,7 +36,7 @@ def createMeasurement(url, deviceId, variableId, value):
         "@type": "Measurement",
         "@id": url + "measurements/" + id,
         "dev:wasMeasuredBy": url + "devices/" + deviceId,
-        "dev:valueOf": url + "devices/" + variableId,
+        "dev:valueOf": url + "variables/" + variableId,
         "value": value,
         "timestamp": timestamp
     }

@@ -1,6 +1,7 @@
 import semantics.simulator.deviceSimulator as dev
 import semantics.simulator.sense as sense
 import semantics.simulator.actuators as act
+import semantics.simulator.tasks as task
 
 globalUrl = "http://localhost:5000/"
 
@@ -17,6 +18,9 @@ discreteActuatorIds = ["discreteActuator1"]
 actuatorsIds = continuousActuatorIds + discreteActuatorIds
 
 conditionValues = [5.44,55.7,40]
+
+commandsIds = ["continuousCommand", "discreteCommand"]
+conditionsIds = ["continuousCondition", "discreteCondition"]
 
 platformIds = ["continuousPlatform1", "discretePlatform1"]
 
