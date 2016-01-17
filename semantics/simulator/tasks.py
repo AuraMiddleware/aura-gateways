@@ -14,7 +14,7 @@ def createCommand(id, url, value, variableId):
 
     return command
 
-def createCondition(id, url, range1, range2, variableId):
+def createCondition(id, url, range1, range2, variableId, commandId):
     condition = {
         "id": id,
         "@context": urls.contextUrl + "conditionContext.jsonld",
@@ -22,7 +22,8 @@ def createCondition(id, url, range1, range2, variableId):
         "@id": url + "conditions/" + id,
         "minValue": range1,
         "maxValue": range2,
-        "task:enforces": url + "variables/" + variableId
+        "task:enforces": url + "variables/" + variableId,
+        "task:triggers": url + "commands/" + commandId
     }
 
     return condition
