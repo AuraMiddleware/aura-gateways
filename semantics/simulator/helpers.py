@@ -62,12 +62,12 @@ for i in range(len(actuatorsIds)):
 platforms = {}
 for i in range(len(platformIds)):
     if i%2 == 0:
-        type = "continuous_"
+        type = "continuous/"
     else:
-        type = "discrete_"
+        type = "discrete/"
     platforms[platformIds[i]] = dev.createPlatform(
-        platformIds[i], globalUrl, type + "sensors/" + sensorsIds[i],
-        type + "actuators/" + actuatorsIds[i])
+        platformIds[i], globalUrl, "sensors/" + type + sensorsIds[i],
+        "actuators/" + type + actuatorsIds[i])
 
 devices = {}
 for i in range(len(deviceIds)):

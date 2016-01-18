@@ -5,7 +5,7 @@ def createContinuousActuator(id, url,variableId):
         "id":id,
         "@context":urls.contextUrl + "continuousActuatorContext.jsonld",
         "@type":"ContinuousActuator",
-        "@id":url + "continuous_actuators/" + id,
+        "@id":url + "actuators/continuous/" + id,
         "actuator:increases":url + "variables/" + variableId,
         "actuator:decreases":url + "variables/" + variableId
     }
@@ -17,7 +17,7 @@ def createDiscreteActuator(id, url,variableId):
         "id":id,
         "@context":urls.contextUrl + "discreteActuatorContext.jsonld",
         "@type":"DiscreteActuator",
-        "@id":url + "discrete_actuators/" + id,
+        "@id":url + "actuators/discrete/" + id,
         "actuator:changeState":url + "variables/" + variableId
     }
 

@@ -6,7 +6,7 @@ def createContinuousSensor(id, url, unitId):
         "id": id,
         "@context":urls.contextUrl+"continuousSensorContext.jsonld",
         "@type":"ContinuousSensor",
-        "@id":url + "continuous_sensors/" + id,
+        "@id":url + "sensors/continuous/" + id,
         "sense:canMeasure":url + "units/" + unitId,
         "precision":random.uniform(0.0,1.0),
         "minValue":0.0,
@@ -20,7 +20,7 @@ def createDiscreteSensor(id, url, variableId):
         "id":id,
         "@context":urls.contextUrl+"discreteSensorContext.jsonld",
         "@type":"DiscreteSensor",
-        "@id":url + "discrete_sensors/" + id,
+        "@id":url + "sensors/discrete/" + id,
         "sense:canMeasure":url + "variables/" + variableId
     }
 
