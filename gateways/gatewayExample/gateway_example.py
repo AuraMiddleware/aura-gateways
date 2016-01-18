@@ -1,17 +1,31 @@
 import paho.mqtt.client as mqtt
 from time import sleep
 import json
-
+import random
 import semantics.simulator.deviceSimulator as dev
 import semantics.simulator.helpers as helpers
+
+collections = [helpers.devices, helpers.platforms, helpers.sensors,
+               helpers.actuators, helpers.units, helpers.variables]
+types = ['Device', 'Platform', 'Sensor', 'Actuator', 'Unit', 'Variable']
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("gateways/broker")
 
 def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
-    client.publish("gateways/test","test received:" + str(msg))
+    obj = json.loads(msg.payload.decode())
+    if obj['type'] in types:
+        index = len(types) - 1
+        while index >= types.index(obj['type']):
+            print("index = " + str(index))
+            for key in collections[index]:
+                response = collections[index][key]
+                print("\n\nresponse:")
+                print(response)
+                client.publish("gateways/test",
+                               json.dumps(response))
+            index -= 1
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -23,10 +37,21 @@ client.loop_start()
 
 index = 0
 while True:
-    sleep(1)
-    #dev.createPlatform(index,index,index)
-    device = dev.createDevice(helpers.deviceIdList[index%20],index%2)
-    index+=1
-    client.publish("gateways/test",str(device))
+    for id in helpers.devices:
+        sleep(1)
+        if index%2 == 0:
+            value = random.random() * 100
+            variableId = helpers.variableIds[0]
+            index = 1
+        else:
+            value = True
+            index = 0
+            variableId = helpers.variableIds[1]
+        measurement = dev.createMeasurement(helpers.globalUrl,
+                                            helpers.devices[id]["id"],
+                                            helpers.variables[variableId]["id"],
+                                            value)
+        print(measurement)
+        client.publish("gateways/test", json.dumps(measurement))
 
 client.loop_stop()

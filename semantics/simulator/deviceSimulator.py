@@ -1,55 +1,44 @@
 from datetime import datetime
-import requests
+
 import random
 import semantics.simulator.urls as urls
-import semantics.simulator.helpers as helpers
 
-def createDevice(deviceID,platformIndex):
+def createDevice(id, url, platformId):
   device = {
-    "@context": urls.contextUrl+"deviceContext.jsonld",
+    "id":id,
+    "@context": urls.contextUrl + "deviceContext.jsonld",
     "@type":"Device",
-    "@id":deviceID,
-    "dev:hasPlatform":helpers.platformIds[platformIndex]
+    "@id":url + "devices/" + id,
+    "dev:hasPlatform":url + "platforms/" + platformId
   }
 
   return device
 
-def createPlatform(platformIndex,sensorIndex,actuatorIndex):
-    platformId = helpers.platformIds[platformIndex]
+def createPlatform(id, url, specific_sensor, specific_actuator):
     platform = {
-        "@context":urls.contextUrl+"platformContext.jsonld",
+        "id":id,
+        "@context": urls.contextUrl + "platformContext.jsonld",
         "@type":"Platform",
-        "@id":platformId,
-        "brand":"Plataforma " + str(platformId),
-        "dev:hasSensor":helpers.sensorIds[sensorIndex],
-        "dev:hasActuator":helpers.actuatorIds[actuatorIndex]
+        "@id":url + "platforms/" + id,
+        "brand":"Plataforma " + id,
+        "dev:hasSensor":url + specific_sensor,
+        "dev:hasActuator":url  + specific_actuator
     }
-    requests.post(urls.globalManagerUrl+'platforms',None,platform)
+    return platform
 
-
-def createMeasurement(deviceId,coefficient):
-    value = 10*coefficient
-    id = helpers.localUrl + "measurements/measurement"+str(random.randint(0,1000))
+def createMeasurement(url, deviceId, variableId, value):
     timestamp = str (datetime.now())
+    id = str(random.randint(0,10000)) + str(datetime.now().microsecond) +\
+        str(random.randint(0,10000))
     measurement = {
-        "@context":urls.contextUrl+"measurementContext.jsonld",
-        "@type":"Measurement",
-        "@id":id,
-        "dev:wasMeasuredBy":deviceId,
-        "value":value,
-        "timestamp":timestamp
+        "id": id,
+        "@context": urls.contextUrl + "measurementContext.jsonld",
+        "@type": "Measurement",
+        "@id": url + "measurements/" + id,
+        "dev:wasMeasuredBy": url + "devices/" + deviceId,
+        "dev:valueOf": url + "variables/" + variableId,
+        "value": value,
+        "timestamp": timestamp
     }
 
     return measurement
-
-def simulateDevices():
-    deviceUrl = urls.localManagerUrl + 'devices'
-    measurementUrl = urls.localManagerUrl + 'measurements'
-
-    for i in range(20):
-        index = i%2
-        createPlatform(index,index,index)
-        device = createDevice(helpers.deviceIdList[i],index)
-        requests.post(deviceUrl,None,device)
-        measurement = createMeasurement(helpers.deviceIdList[i],i)
-        requests.post(measurementUrl,None,measurement)

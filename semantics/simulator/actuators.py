@@ -1,37 +1,24 @@
-import requests
-import random
-import urls
-import helpers
+import semantics.simulator.urls as urls
 
-def createContinuousActuator(actuatorIndex,variableIndex):
-    actuatorId = helpers.actuatorIds[actuatorIndex]
-    variable = helpers.variableIds[variableIndex]
+def createContinuousActuator(id, url,variableId):
     actuator = {
+        "id":id,
         "@context":urls.contextUrl + "continuousActuatorContext.jsonld",
         "@type":"ContinuousActuator",
-        "@id":actuatorId,
-        "actuator:increases":variable,
-        "actuator:decreases":variable
+        "@id":url + "actuators/continuous/" + id,
+        "actuator:increases":url + "variables/" + variableId,
+        "actuator:decreases":url + "variables/" + variableId
     }
 
     return actuator
 
-def createDiscreteActuator(actuatorIndex,variableIndex):
-    actuatorId = helpers.actuatorIds[actuatorIndex]
-    variable = helpers.variableIds[variableIndex]
+def createDiscreteActuator(id, url,variableId):
     actuator = {
+        "id":id,
         "@context":urls.contextUrl + "discreteActuatorContext.jsonld",
         "@type":"DiscreteActuator",
-        "@id":actuatorId,
-        "actuator:changeState":variable
+        "@id":url + "actuators/discrete/" + id,
+        "actuator:changeState":url + "variables/" + variableId
     }
 
     return actuator
-
-def createActuators():
-    for i in range(1):
-        continuousActuator = createContinuousActuator(0,0)
-        discreteActuator = createDiscreteActuator(1,1)
-        requests.post(urls.globalManagerUrl+'actuators',None,continuousActuator)
-        requests.post(urls.globalManagerUrl+'actuators',None,discreteActuator)
-
