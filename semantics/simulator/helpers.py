@@ -1,30 +1,31 @@
 import semantics.simulator.deviceSimulator as dev
 import semantics.simulator.sense as sense
 import semantics.simulator.actuators as act
-import semantics.simulator.tasks as task
+
+from random import random
 
 globalUrl = "http://localhost:5000/"
 
-variableIds = ["continuousVariable","discreteVariable"]
+variableIds = ["variable" + str(i) for i in range(1,51)]
 
-unitIds = ["unit#1"]
+unitIds = ["unit" + str(i) for i in range(1,26)]
 
-continuousSensorIds = ["continuousSensor1"]
-discreteSensorIds = ["discreteSensor1"]
+continuousSensorIds = ["continuousSensor" + str(i) for i in range(1,26)]
+discreteSensorIds = ["discreteSensor" + str(i) for i in range(1,26)]
 sensorsIds = continuousSensorIds + discreteSensorIds
 
-continuousActuatorIds = ["continuousActuator1"]
-discreteActuatorIds = ["discreteActuator1"]
+continuousActuatorIds = ["continuousActuator" + str(i) for i in range(1,26)]
+discreteActuatorIds = ["discreteActuator" + str(i) for i in range(1,26)]
 actuatorsIds = continuousActuatorIds + discreteActuatorIds
 
-conditionValues = [5.44,55.7,40]
+conditionValues = [random() + i for i in range(1,11)]
 
-commandsIds = ["continuousCommand", "discreteCommand"]
-conditionsIds = ["continuousCondition", "discreteCondition"]
+commandsIds = ["command" + str(i) for i in range(1,51)]
+conditionsIds = ["condition" + str(i) for i in range(1,51)]
 
-platformIds = ["continuousPlatform1", "discretePlatform1"]
+platformIds = ["platform" + str(i) for i in range(1,51)]
 
-deviceIds = ["device" + str(x) for x in range(2)]
+deviceIds = ["device" + str(x) for x in range(1,51)]
 
 
 variables = {}
@@ -36,20 +37,22 @@ units = {}
 for i in range(len(unitIds)):
     units[unitIds[i]] = sense.createUnit(unitIds[i], globalUrl, variableIds[i])
 
+
 sensors = {}
 for i in range(len(sensorsIds)):
-    if i%2 == 0:
+    if i < len(unitIds):
         sensors[sensorsIds[i]] = sense.createContinuousSensor(sensorsIds[i],
                                                               globalUrl,
-                                                              unitIds[0])
+                                                              unitIds[i])
     else:
         sensors[sensorsIds[i]] = sense.createDiscreteSensor(sensorsIds[i],
                                                             globalUrl,
                                                             variableIds[i])
 
+
 actuators = {}
 for i in range(len(actuatorsIds)):
-    if i%2 == 0:
+    if i < len(unitIds):
         actuators[actuatorsIds[i]] = act.createContinuousActuator(
             actuatorsIds[i],
             globalUrl,
@@ -61,7 +64,7 @@ for i in range(len(actuatorsIds)):
 
 platforms = {}
 for i in range(len(platformIds)):
-    if i%2 == 0:
+    if i < len(unitIds):
         type = "continuous/"
     else:
         type = "discrete/"
@@ -71,5 +74,5 @@ for i in range(len(platformIds)):
 
 devices = {}
 for i in range(len(deviceIds)):
-    devices[deviceIds[i]] = dev.createDevice(deviceIds[i],globalUrl,
-                                             platformIds[i%2])
+    devices[deviceIds[i]] = dev.createDevice(deviceIds[i], globalUrl,
+                                             platformIds[i])
