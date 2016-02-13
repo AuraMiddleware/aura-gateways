@@ -21,10 +21,9 @@ def on_message(client, userdata, msg):
             print("index = " + str(index))
             for key in collections[index]:
                 response = collections[index][key]
-                print("\n\nresponse:")
-                print(response)
-                client.publish("gateways/test",
-                               json.dumps(response))
+                #print("\n\nresponse:")
+                #print(response)
+                client.publish("gateways/test", json.dumps(response))
             index -= 1
 
 client = mqtt.Client()
@@ -36,22 +35,29 @@ client.connect("localhost", 1885, 60)
 client.loop_start()
 
 index = 0
+count = 1
+
+print("deviceIds: " + str(len(helpers.deviceIds)))
+
 while True:
     for id in helpers.devices:
         sleep(1)
-        if index%2 == 0:
+        print("index: " + str(index))
+        if index < len(helpers.unitIds):
             value = random.random() * 100
-            variableId = helpers.variableIds[0]
-            index = 1
+            variableId = helpers.variableIds[index]
         else:
             value = True
-            index = 0
-            variableId = helpers.variableIds[1]
+            variableId = helpers.variableIds[index]
         measurement = dev.createMeasurement(helpers.globalUrl,
                                             helpers.devices[id]["id"],
                                             helpers.variables[variableId]["id"],
                                             value)
-        print(measurement)
+        print(count)
+        count += 1
+        index += 1
+        if index == len(helpers.deviceIds):
+            index = 0
         client.publish("gateways/test", json.dumps(measurement))
 
 client.loop_stop()
