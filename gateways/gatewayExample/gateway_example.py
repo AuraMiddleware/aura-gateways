@@ -42,7 +42,6 @@ print("deviceIds: " + str(len(helpers.deviceIds)))
 while True:
     for id in helpers.devices:
         sleep(1)
-        print("index: " + str(index))
         if index < len(helpers.unitIds):
             value = random.random() * 100
             variableId = helpers.variableIds[index]
